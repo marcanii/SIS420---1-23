@@ -14,7 +14,7 @@ License: GNU GENERAL PUBLIC LICENSE (GPL)
 
 HUMANO = -1
 COMPUTADOR = +1
-board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+board = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 
 def evaluate(estado):
     """
@@ -42,14 +42,16 @@ def wins(estado, player):
     :devuelve: True si un jugador gana
     """
     win_state = [
-        [estado[0][0], estado[0][1], estado[0][2]],
-        [estado[1][0], estado[1][1], estado[1][2]],
-        [estado[2][0], estado[2][1], estado[2][2]],
-        [estado[0][0], estado[1][0], estado[2][0]],
-        [estado[0][1], estado[1][1], estado[2][1]],
-        [estado[0][2], estado[1][2], estado[2][2]],
-        [estado[0][0], estado[1][1], estado[2][2]],
-        [estado[2][0], estado[1][1], estado[0][2]],
+        [estado[0][0], estado[0][1], estado[0][2], estado[0][3]],
+        [estado[1][0], estado[1][1], estado[1][2], estado[1][3]],
+        [estado[2][0], estado[2][1], estado[2][2], estado[2][3]],
+        [estado[3][0], estado[3][1], estado[3][2], estado[3][3]],
+        [estado[0][0], estado[1][0], estado[2][0], estado[3][0]],
+        [estado[0][1], estado[1][1], estado[2][1], estado[3][1]],
+        [estado[0][2], estado[1][2], estado[2][2], estado[3][2]],
+        [estado[0][3], estado[1][3], estado[2][3], estado[3][3]],
+        [estado[0][0], estado[1][1], estado[2][2], estado[3][3]],
+        [estado[3][0], estado[2][1], estado[1][2], estado[0][3]]
     ]
     if [player, player, player] in win_state:
         return True
@@ -116,13 +118,13 @@ def minimax(estado, depth, player):
     :devuelve, una lista con [la mejor fila, la mejor columna, el mejor score]
     """
     if player == COMPUTADOR:
-        best = [-1, -1, -infinity]
+        best = [-1, -1, -1, -infinity]
     else:
-        best = [-1, -1, +infinity]
+        best = [-1, -1, -1, +infinity]
 
     if depth == 0 or game_over(estado):
         score = evaluate(estado)
-        return [-1, -1, score]
+        return [-1, -1, -1, score]
 
     for cell in empty_cells(estado):
         x, y = cell[0], cell[1]
@@ -132,10 +134,10 @@ def minimax(estado, depth, player):
         score[0], score[1] = x, y
 
         if player == COMPUTADOR:
-            if score[2] > best[2]:
+            if score[3] > best[3]:
                 best = score  # max value
         else:
-            if score[2] < best[2]:
+            if score[3] < best[3]:
                 best = score  # min value
 
     return best
@@ -163,7 +165,7 @@ def render(estado, c_choice, h_choice):
         +1: c_choice,
         0: ' '
     }
-    str_line = '---------------'
+    str_line = '--------------------'
 
     print('\n' + str_line)
     for fila in estado:
@@ -189,9 +191,9 @@ def ai_turn(c_choice, h_choice):
     print(f'Juega COMPUTADOR [{c_choice}]')
     render(board, c_choice, h_choice)
 
-    if depth == 9:
-        x = choice([0, 1, 2])
-        y = choice([0, 1, 2])
+    if depth == 16:
+        x = choice([0, 1, 2, 3])
+        y = choice([0, 1, 2, 3])
     else:
         move = minimax(board, depth, COMPUTADOR)
         x, y = move[0], move[1]
@@ -213,18 +215,19 @@ def HUMANO_turn(c_choice, h_choice):
     # Dictionary of valid moves
     move = -1
     moves = {
-        1: [0, 0], 2: [0, 1], 3: [0, 2],
-        4: [1, 0], 5: [1, 1], 6: [1, 2],
-        7: [2, 0], 8: [2, 1], 9: [2, 2],
+        1: [0, 0], 2: [0, 1], 3: [0, 2], 4: [0, 3],
+        5: [1, 0], 6: [1, 1], 7: [1, 2], 8: [1, 3],
+        9: [2, 0], 10: [2, 1], 11: [2, 2], 12: [2, 3],
+        13: [3, 0], 14: [3, 1], 15: [3, 2], 16: [3, 3]
     }
 
     clean()
     print(f'turno HUMANO [{h_choice}]')
     render(board, c_choice, h_choice)
 
-    while move < 1 or move > 9:
+    while move < 1 or move > 16:
         try:
-            move = int(input('Use los numeros (1..9): '))
+            move = int(input('Use los numeros (1..16): '))
             coord = moves[move]
             can_move = set_move(coord[0], coord[1], HUMANO)
 

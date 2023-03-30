@@ -66,6 +66,3 @@ if __name__ == "__main__":
         print('-------------')
     tiempo_ejecucion = fin_tiempo - inicio_tiempo
     print('Tiempo de ejecucion: ', tiempo_ejecucion, 'seg.')
-
-    # probando repositorio laptop
-    # probando repo desde compu pc
