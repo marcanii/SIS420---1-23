@@ -1,233 +1,171 @@
-import math
+import numpy as np
 import random
 
+# Función para crear el tablero
 def create_board():
-    """
-    Esta función crea un tablero de juego vacío para el 6 en raya.
-    """
-    board = [['-' for x in range(6)] for y in range(6)]
-    return board
+    return np.zeros((6, 6), dtype=int)
 
+# Función para imprimir el tablero
 def print_board(board):
-    """
-    Esta función imprime el tablero de juego en la consola.
-    """
-    for row in board:
-        print(' '.join(row))
-    print()
+    print(np.flip(board, 0))
 
-def evaluate(board):
-    """
-    Evalúa el tablero para determinar la puntuación.
-    Devuelve +infinito si la computadora gana, -infinito si el jugador humano gana,
-    y la diferencia de fichas si no hay ganador.
-    """
-    winner = get_winner(board)
-    if winner == 'X':
-        return float('inf')
-    elif winner == 'O':
-        return float('-inf')
-    else:
-        score = 0
-        # Comprobar filas
-        for row in board:
-            for i in range(len(row)-5):
-                window = row[i:i+6]
-                score += evaluate_window(window)
-        # Comprobar columnas
-        for j in range(len(board[0])):
-            for i in range(len(board)-5):
-                window = [board[i+k][j] for k in range(6)]
-                score += evaluate_window(window)
-        # Comprobar diagonales ascendentes
-        for i in range(len(board)-5):
-            for j in range(len(board[0])-5):
-                window = [board[i+k][j+k] for k in range(6)]
-                score += evaluate_window(window)
-        # Comprobar diagonales descendentes
-        for i in range(5, len(board)):
-            for j in range(len(board[0])-5):
-                window = [board[i-k][j+k] for k in range(6)]
-                score += evaluate_window(window)
-        return score
+# Función para determinar si un movimiento es válido
+def is_valid_move(board, col):
+    return board[5][col] == 0
 
-def evaluate_window(window):
-    """
-    Evalúa una ventana de 6 fichas.
-    Devuelve 100 si la computadora tiene 5 fichas en la ventana,
-    10 si la computadora tiene 4 fichas y una casilla vacía en la ventana,
-    1 si la computadora tiene 3 fichas y dos casillas vacías en la ventana,
-    -10 si el jugador humano tiene 4 fichas y una casilla vacía en la ventana,
-    -1 si el jugador humano tiene 3 fichas y dos casillas vacías en la ventana,
-    y 0 en cualquier otro caso.
-    """
-    if window.count('X') == 5:
-        return 100
-    elif window.count('X') == 4 and window.count(None) == 1:
-        return 10
-    elif window.count('X') == 3 and window.count(None) == 2:
-        return 1
-    elif window.count('O') == 4 and window.count(None) == 1:
-        return -10
-    elif window.count('O') == 3 and window.count(None) == 2:
+# Función para realizar un movimiento
+def drop_piece(board, row, col, piece):
+    board[row][col] = piece
+
+# Función para comprobar si hay cuatro en línea
+def get_winner(board):
+    # Comprobar filas
+    for row in range(6):
+        for col in range(3):
+            if board[row][col] == board[row][col + 1] == board[row][col + 2] == board[row][col + 3] != 0:
+                return board[row][col]
+
+    # Comprobar columnas
+    for row in range(3):
+        for col in range(6):
+            if board[row][col] == board[row + 1][col] == board[row + 2][col] == board[row + 3][col] != 0:
+                return board[row][col]
+
+    # Comprobar diagonales
+    for row in range(3):
+        for col in range(3):
+            if board[row][col] == board[row + 1][col + 1] == board[row + 2][col + 2] == board[row + 3][col + 3] != 0:
+                return board[row][col]
+    for row in range(3, 6):
+        for col in range(3):
+            if board[row][col] == board[row - 1][col + 1] == board[row - 2][col + 2] == board[row - 3][col + 3] != 0:
+                return board[row][col]
+
+    # Comprobar si hay empate
+    if np.all(board != 0):
         return -1
-    else:
+
+    return 0
+
+# Función para evaluar el estado actual del tablero
+def evaluate(board, piece):
+    # Definir las puntuaciones
+    global scores
+    scores = [0, 1, 10, 100, 1000]
+
+    # Calcular puntuación para filas
+    score = 0
+    for row in range(6):
+        row_array = [int(i) for i in list(board[row,:])]
+        for col in range(3):
+            window = row_array[col:col+4]
+            score += scores[window.count(piece)]
+    # Calcular puntuación para columnas
+    for col in range(6):
+        col_array = [int(i) for i in list(board[:,col])]
+        for row in range(3):
+            window = col_array[row:row+4]
+            score += scores[window.count(piece)]
+    # Calcular puntuación para diagonales
+    for row in range(3):
+        for col in range(3):
+            window = [board[row+i][col+i] for i in range(4)]
+            score += scores[window.count(piece)]
+    for row in range(3):
+        for col in range(3):
+            window = [board[row+3-i][col+i] for i in range(4)]
+            score
+
+def find_best_move(board, piece):
+    valid_moves = [col for col in range(6) if is_valid_move(board, col)]
+    best_score = -10000
+    best_col = random.choice(valid_moves)
+    for col in valid_moves:
+        row = get_next_open_row(board, col)
+        temp_board = board.copy()
+        drop_piece(temp_board, row, col, piece)
+        score = minimax(temp_board, 5, False, -10000, 10000)
+        if score > best_score:
+            best_score = score
+        best_col = col
+    return best_col
+
+#Función para obtener la siguiente fila disponible en una columna
+def get_next_open_row(board, col):
+    for row in range(6):
+        if board[row][col] == 0:
+            return row
+    return -1
+
+#Función para realizar la poda alpha-beta
+def minimax(board, depth, is_maximizing_player, alpha, beta):
+    # Verificar si el juego ha terminado
+    winner = get_winner(board)
+    if winner == COMPUTER_PLAYER:
+        return 100 - depth
+    elif winner == HUMAN_PLAYER:
+        return -100 + depth
+    elif is_board_full(board):
         return 0
 
+    # Maximizing player
+    if is_maximizing_player:
+        best_score = -math.inf
+        for col in range(COLS):
+            if is_valid_move(board, col):
+                new_board = get_new_board(board, col, COMPUTER_PLAYER)
+                score = minimax(new_board, depth + 1, False, alpha, beta)
+                best_score = max(best_score, score)
+                alpha = max(alpha, score)
+                if alpha >= beta:
+                    break
+        return best_score
 
-def is_game_over(board):
-    """
-    Esta función comprueba si el juego ha terminado.
-    """
-    for row in board:
-        if '-' in row:
-            return False
-    return True
-
-def get_valid_moves(board):
-    """
-    Esta función devuelve una lista de movimientos válidos que se pueden hacer en el tablero.
-    """
-    valid_moves = []
-    for i in range(6):
-        for j in range(6):
-            if board[i][j] == '-':
-                valid_moves.append((i, j))
-    return valid_moves
-
-def minimax(board, depth, alpha, beta, maximizing_player):
-    """
-    Esta función
-    implementa el algoritmo Minimax con la poda alfa-beta para seleccionar el mejor movimiento.
-    """
-    # Comprobar si el juego ha terminado o si se ha alcanzado la profundidad máxima
-    if is_game_over(board) or depth == 0:
-        return evaluate(board)
-
-    # Obtener los movimientos válidos para el jugador actual
-    valid_moves = get_valid_moves(board)
-
-    # Si el jugador actual es el jugador que maximiza, buscar el movimiento que maximiza la puntuación
-    if maximizing_player:
-        max_score = -math.inf
-        for move in valid_moves:
-            # Hacer el movimiento en el tablero
-            board[move[0]][move[1]] = 'X'
-            # Llamar a la función minimax para el jugador contrario con la profundidad reducida
-            score = minimax(board, depth-1, alpha, beta, False)
-            # Deshacer el movimiento en el tablero
-            board[move[0]][move[1]] = '-'
-            # Actualizar la puntuación máxima y la poda alfa
-            max_score = max(max_score, score)
-            alpha = max(alpha, score)
-            if beta <= alpha:
-                break
-        return max_score
-    # Si el jugador actual es el jugador que minimiza, buscar el movimiento que minimiza la puntuación
+    # Minimizing player
     else:
-        min_score = math.inf
-        for move in valid_moves:
-            # Hacer el movimiento en el tablero
-            board[move[0]][move[1]] = 'O'
-            # Llamar a la función minimax para el jugador contrario con la profundidad reducida
-            score = minimax(board, depth-1, alpha, beta, True)
-            # Deshacer el movimiento en el tablero
-            board[move[0]][move[1]] = '-'
-            # Actualizar la puntuación mínima y la poda beta
-            min_score = min(min_score, score)
-            beta = min(beta, score)
-            if beta <= alpha:
-                break
-        return min_score
+        best_score = math.inf
+        for col in range(COLS):
+            if is_valid_move(board, col):
+                new_board = get_new_board(board, col, HUMAN_PLAYER)
+                score = minimax(new_board, depth + 1, True, alpha, beta)
+                best_score = min(best_score, score)
+                beta = min(beta, score)
+                if alpha >= beta:
+                    break
+        return best_score if best_score != math.inf else -100
 
-def get_best_move(board, depth):
-    """
-    Esta función devuelve el mejor movimiento que se puede hacer en el tablero utilizando el algoritmo Minimax con la poda alfa-beta.
-    """
-    best_move = None
-    max_score = -math.inf
-    for move in get_valid_moves(board):
-        # Hacer el movimiento en el tablero
-        board[move[0]][move[1]] = 'X'
-        # Llamar a la función minimax para el jugador contrario con la profundidad reducida
-        score = minimax(board, depth-1, -math.inf, math.inf, False)
-        # Deshacer el movimiento en el tablero
-        board[move[0]][move[1]] = '-'
-        # Actualizar el mejor movimiento y la puntuación máxima
-        if score > max_score:
-            best_move = move
-            max_score = score
-
-    return best_move
-def get_winner(board):
-    """
-    Determina si hay un ganador en el juego 6 en raya.
-    Devuelve 'O' si gana el jugador humano, 'X' si gana la computadora,
-    y None si no hay ganador todavía.
-    """
-    # Comprobar filas
-    for row in board:
-        for i in range(len(row)-5):
-            if row[i:i+6] == ['O', 'O', 'O', 'O', 'O', 'O']:
-                return 'O'
-            elif row[i:i+6] == ['X', 'X', 'X', 'X', 'X', 'X']:
-                return 'X'
-    # Comprobar columnas
-    for j in range(len(board[0])):
-        for i in range(len(board)-5):
-            if [board[i+k][j] for k in range(6)] == ['O', 'O', 'O', 'O', 'O', 'O']:
-                return 'O'
-            elif [board[i+k][j] for k in range(6)] == ['X', 'X', 'X', 'X', 'X', 'X']:
-                return 'X'
-    # Comprobar diagonales ascendentes
-    for i in range(len(board)-5):
-        for j in range(len(board[0])-5):
-            if [board[i+k][j+k] for k in range(6)] == ['O', 'O', 'O', 'O', 'O', 'O']:
-                return 'O'
-            elif [board[i+k][j+k] for k in range(6)] == ['X', 'X', 'X', 'X', 'X', 'X']:
-                return 'X'
-    # Comprobar diagonales descendentes
-    for i in range(5, len(board)):
-        for j in range(len(board[0])-5):
-            if [board[i-k][j+k] for k in range(6)] == ['O', 'O', 'O', 'O', 'O', 'O']:
-                return 'O'
-            elif [board[i-k][j+k] for k in range(6)] == ['X', 'X', 'X', 'X', 'X', 'X']:
-                return 'X'
-    return None
-
-def play():
-    """
-    Esta función maneja el flujo del juego.
-    """
+#Función principal del juego
+def play_game():
+    # Crear el tablero
     board = create_board()
+    game_over = False
+    turn = random.randint(1, 2)
     print_board(board)
-    while not is_game_over(board):
+    while not game_over:
+        if turn == 1:
         # Turno del jugador
-        row = int(input("Introduce el número de fila (1-6): ")) - 1
-        col = int(input("Introduce el número de columna (1-6): ")) - 1
-        if board[row][col] == '-':
-            board[row][col] = 'O'
+            col = int(input("Jugador 1, elige una columna (0-5): "))
+            if is_valid_move(board, col):
+                row = get_next_open_row(board, col)
+                drop_piece(board, row, col, 1)
+                print_board(board)
+            if get_winner(board) == 1:
+                print("¡Jugador 1 gana!")
+                game_over = True
+                turn = 2
         else:
-            print("Esa casilla ya está ocupada. Introduce otra posición.")
-            continue
-        print_board(board)
-        if is_game_over(board):
-            break
-        # Turno de la computadora
-        print("Turno de la computadora...")
-        depth = 4
-        move = get_best_move(board, depth)
-        board[move[0]][move[1]] = 'X'
-        print(f"La computadora ha hecho el movimiento {move[0] + 1},{move[1] + 1}")
-        print_board(board)
-    winner = get_winner(board)
-    if winner == 'O':
-        print("¡Felicidades! Has ganado el juego.")
-    elif winner == 'X':
-        print("La computadora ha ganado el juego.")
-    else:
-        print("El juego ha terminado en empate.")
+            # Turno de la computadora
+            print("Turno de la computadora...")
+            col = find_best_move(board, 2)
+            if is_valid_move(board, col):
+                row = get_next_open_row(board, col)
+                drop_piece(board, row, col, 2)
+                print_board(board)
+            if get_winner(board) == 2:
+                print("¡La computadora gana!")
+                game_over = True
+                turn = 1
 
 
 if __name__ == '__main__':
-    play()
+    play_game()
