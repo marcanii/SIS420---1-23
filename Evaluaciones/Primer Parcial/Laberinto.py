@@ -5,14 +5,15 @@ MAPA = """
 ##############################
 #E        #              #   #
 #  ###    ########       #   #
-#  #     A #             #   #
+#  #       #             #   #
 #     ##     ####   ######   #
-#   C      ####     #        #
+#          ####     #        #
 #            #  #   #   #### #
 #     ######    #   #   #    #
-#  B     ###    #            #
+#        ###    #       ABC  #
 ##############################
 """
+
 MAPA = [list(x) for x in MAPA.split("\n") if x]
 COSTOS = {
     "arriba": 1.0,
@@ -67,12 +68,6 @@ class JuegoLaberinto(ProblemaBusqueda):
     def costo(self, estado, accion, estado2):
         return COSTOS[accion]
 
-    # def heuristica(self, estado):
-    #     x, y = estado
-    #     gx, gy = self.estado_objetivo1
-    #     return math.sqrt((x - gx) ** 2 + (y - gy) ** 2)
-
-
 def main():
     caracter = '';
     problema = JuegoLaberinto(MAPA)
@@ -96,9 +91,6 @@ def main():
             else:
                 print(MAPA[y][x], end='')
         print()
-
-    print('El camino mas corto es hacia el punto: ',caracter)
-    print('Con una distancia de ', len(camino)-1, 'puntos')
 
 if __name__ == "__main__":
     main()

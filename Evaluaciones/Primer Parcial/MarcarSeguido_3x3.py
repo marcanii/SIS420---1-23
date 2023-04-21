@@ -19,8 +19,8 @@ def evaluate(estado):
     return score
 
 def wins(estado, player):
-    contP = 0
-    contNP = 0
+    contComp = 0
+    contHum = 0
     win_state = [
         # horizontales
         [estado[0][0], estado[0][1]],
@@ -40,11 +40,11 @@ def wins(estado, player):
 
     for elem in win_state:
         if elem == [player, player]:
-            contP += 1
+            contComp += 1
         elif elem == [-player, -player]:
-            contNP += 1
+            contHum += 1
 
-    if contP > contNP:
+    if contComp > contHum:
         return True
     else:
         return False
