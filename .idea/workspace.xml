@@ -26,8 +26,6 @@
     <setting file="file://$PROJECT_DIR$/Evaluaciones/Primer Parcial/MarcarSeguido_3x3.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/Evaluaciones/Primer Parcial/bbb.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/Evaluaciones/Primer Parcial/contraseña_genetico.py" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/Laboratorio5/4enRaya_tablero_6x6.py" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/Laboratorio5/Minimax_Poda_Alfa_Beta_3enRaya.py" root0="SKIP_INSPECTION" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -44,7 +42,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "H:/5° Semestre/Inteligencia Artificial/PyCharm/SIS420/Evaluaciones/Primer Parcial"
+    "last_opened_file_path": "C:/5° Semestre/Inteligencia Artificial/SIS420---1-23"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -55,7 +53,7 @@
       <recent name="D:\5° Semestre\Inteligencia Artificial\PyCharm\SIS420\Laboratorio5" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.contraseña_genetico">
+  <component name="RunManager" selected="Python.Algoritmo_genetico_01">
     <configuration name="Algoritmo_genetico_01" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="SIS420" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -163,8 +161,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.contraseña_genetico" />
         <item itemvalue="Python.Algoritmo_genetico_01" />
+        <item itemvalue="Python.contraseña_genetico" />
         <item itemvalue="Python.MarcarSeguido_3x3" />
         <item itemvalue="Python.bbb" />
         <item itemvalue="Python.aaa" />
