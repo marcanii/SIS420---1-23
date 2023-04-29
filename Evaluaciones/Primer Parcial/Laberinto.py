@@ -5,27 +5,23 @@ MAPA = """
 ##############################
 #E        #              #   #
 #  ###    ########       #   #
-#  #      #         B    #   #
+#  #       #             #   #
 #     ##     ####   ######   #
 #          ####     #        #
 #            #  #   #   #### #
-#     ######    #   #   #  C #
-#  A     ###    #            #
+#     ######    #   #   #    #
+#        ###    #       ABC  #
 ##############################
 """
 
 MAPA = [list(x) for x in MAPA.split("\n") if x]
-
 COSTOS = {
     "arriba": 1.0,
     "abajo": 1.0,
     "izquierda": 1.0,
     "derecha": 1.0,
 }
-
-
 class JuegoLaberinto(ProblemaBusqueda):
-
     def __init__(self, tablero):
         self.tablero = tablero
         self.estado_objetivo1 = (0, 0)
@@ -43,7 +39,6 @@ class JuegoLaberinto(ProblemaBusqueda):
                     self.estado_objetivo3 = (x, y)
 
         super(JuegoLaberinto, self).__init__(estado_inicial=self.estado_inicial)
-
     def acciones(self, estado):
         acciones = []
         for accion in list(COSTOS.keys()):
@@ -73,33 +68,29 @@ class JuegoLaberinto(ProblemaBusqueda):
     def costo(self, estado, accion, estado2):
         return COSTOS[accion]
 
-    # def heuristica(self, estado):
-    #     x, y = estado
-    #     gx, gy = self.estado_objetivo1
-    #     return math.sqrt((x - gx) ** 2 + (y - gy) ** 2)
-
-
 def main():
+    caracter = '';
     problema = JuegoLaberinto(MAPA)
     resultado = aestrella(problema, busqueda_en_grafo=True)
     camino = [x[1] for x in resultado.camino()]
-    print(camino)
     for y in range(len(MAPA)):
         for x in range(len(MAPA[y])):
             if (x, y) == problema.estado_inicial:
                 print("E", end='')
             elif (x, y) == problema.estado_objetivo1:
                 print("A", end='')
+                caracter = 'A';
             elif (x, y) == problema.estado_objetivo2:
                 print("B", end='')
+                caracter = 'B';
             elif (x, y) == problema.estado_objetivo3:
                 print("C", end='')
+                caracter = 'C';
             elif (x, y) in camino:
                 print("*", end='')
             else:
                 print(MAPA[y][x], end='')
         print()
-
 
 if __name__ == "__main__":
     main()

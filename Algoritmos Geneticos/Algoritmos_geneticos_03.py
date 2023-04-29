@@ -1,6 +1,5 @@
 import random
 
-
 # ================================================
 # Implementación clase abstracta algoritmo genético
 # ================================================
