@@ -2,17 +2,14 @@ import random
 
 # Definir una lista con las teclas disponibles
 teclas = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-
 # Definir la longitud de la contraseña
 longitud = 9
-
-# Función de evaluación para determinar la calidad de cada contraseña
+# Función de valuación para determinar la calidad de cada contraseña
 def evaluar_contraseña(contraseña):
     distancia_total = 0
     for i in range(1, len(contraseña)):
         distancia_total += abs(contraseña[i] - contraseña[i - 1])
     return distancia_total
-
 # Función para generar una contraseña aleatoria
 def generar_contraseña():
     contraseña = random.sample(teclas, longitud)
