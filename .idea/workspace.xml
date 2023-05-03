@@ -38,6 +38,7 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+<<<<<<< HEAD
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
@@ -46,6 +47,13 @@
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;F:/5° Semestre/Inteligencia Artificial/PyCharm/SIS420&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+=======
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/5° Semestre/Inteligencia Artificial/SIS420---1-23"
+>>>>>>> origin/master
   }
 }</component>
   <component name="RecentsManager">
@@ -56,7 +64,7 @@
       <recent name="D:\5° Semestre\Inteligencia Artificial\PyCharm\SIS420\Laboratorio5" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.contraseña_genetico">
+  <component name="RunManager" selected="Python.Algoritmo_genetico_01">
     <configuration name="Algoritmo_genetico_01" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="SIS420" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -164,8 +172,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.contraseña_genetico" />
         <item itemvalue="Python.Algoritmo_genetico_01" />
+        <item itemvalue="Python.contraseña_genetico" />
         <item itemvalue="Python.MarcarSeguido_3x3" />
         <item itemvalue="Python.bbb" />
         <item itemvalue="Python.aaa" />
